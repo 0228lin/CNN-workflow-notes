@@ -72,7 +72,13 @@ print(simple_conv(image, filter, bias))  # Output: -3
 
 ## 💡 Step 3: Activation Layer (ReLU (Rectified Linear Unit))
 
-`ReLU` : A function defined as $$ f(x) = \max(0, x) $$ --- turns all negative values to zero and keeps positive values unchanged.  
+`ReLU` : A function defined as 
+
+$$
+f(x) = \max(0, x)
+$$
+
+--- turns all negative values to zero and keeps positive values unchanged.  
 
 ### 📦 ReLU Example:
 
@@ -96,8 +102,8 @@ print(relu(x))  # Output: [0 0 3]
 
 ### Types:
 - **Max Pooling**: Selects the maximum value from a patch of the feature map. 
-- **Average Pooling**: Averages the values in the patch.
-![**Pooling**](https://pic2.zhimg.com/v2-1519745e58e78e28cfd0bf3aee6e2cb7_1440w.jpg)
+- **Average Pooling**: Averages the values in the patch.  
+![**Pooling**](https://pic2.zhimg.com/v2-1519745e58e78e28cfd0bf3aee6e2cb7_1440w.jpg)  
 
 `Kernel Size`: Defines the dimensions of the patch being pooled.  
 `Stride`: Controls how far the window moves between pooling operations.  
@@ -191,7 +197,13 @@ print(encoded)
 ## 📊 Step 8: Softmax Function
 *Softmax ensures each output is interpretable as a probability and lets the model "choose" the most likely class.*
 **Purpose**: Convert logits to probabilities for classification.(把只有计算机能看懂的数字变成人类能看懂的概率 `normalization`，概率最大的就是那个分类，用于classification，所有概率加和为1)
-**Formula**: $$ \text{Softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}} $$
+**Formula**: 
+
+$$
+\text{Softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}
+$$
+
+![Softmax](https://pic1.zhimg.com/v2-a511bf904037c009998665bdc78e2f4a_1440w.jpg)  
 **Output**: A probability distribution across all possible classes (e.g., [0.1, 0.7, 0.2] for 3 classes).
 
 ### 📦 Example:
@@ -216,7 +228,10 @@ print(probs)  # tensor([0.659, 0.242, 0.099])
 **Purpose**: Measure how far predictions deviate from actual labels.  The loss function quantifies how wrong the model is — and drives learning by guiding gradient descent to reduce error.
 
 ### Cross Entropy Loss (for classification):  Measures the difference between predicted probabilities and actual labels.  
-**Function**: $$ \text{Loss} = - \sum y \log(p) $$  
+**Function**: 
+
+$$ \text{Loss} = - \sum y \log(p) $$  
+
 - `y` : the true label (often one-hot encoded)
 - `p` : the predicted probability
 
@@ -253,8 +268,8 @@ print(loss.item())  # Example: ~0.74
 ## 🛠️ 10. Hyperparameters
 
 - **Kernel Initialization**: Often Gaussian-distributed
-- **Padding**: Preserves edge information
-![Padding](https://pic1.zhimg.com/v2-608f1fe51c1e6d202e539fe362d9f9ba_1440w.jpg)
+- **Padding**: Preserves edge information --- 用像素填充输入图像的边界，这样边界信息被卷积核扫描到的次数不会远低于中间信息的扫描次数，从而保持边界信息价值，也可以使所有的输入图像尺寸一致  
+![Padding](https://pic1.zhimg.com/v2-608f1fe51c1e6d202e539fe362d9f9ba_1440w.jpg)  
 - **Stride**: Controls filter movement; larger stride = coarser features --- 卷积核工作的时候，每次滑动的格子数，默认是1，但是也可以自行设置，步幅越大，扫描次数越少，得到的特征也就越“粗糙”
 
 ---
