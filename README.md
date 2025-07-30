@@ -85,7 +85,8 @@ print(relu(x))  # Output: [0 0 3]
 
 ### 🧠 Why ReLU?
 - Filters out negative noise.
-- It introduces non-linearity, enabling the network to learn complex, non-linear mappings between inputs and outputs.  
+- It introduces non-linearity, enabling the network to learn complex, non-linear mappings between inputs and outputs.
+
 📌 Alternatives: Sigmoid and Tanh functions are also used, but ReLU tends to perform better in deep networks.
 ---
 
@@ -98,8 +99,9 @@ print(relu(x))  # Output: [0 0 3]
 - **Average Pooling**: Averages the values in the patch.
 ![**Pooling**](https://pic2.zhimg.com/v2-1519745e58e78e28cfd0bf3aee6e2cb7_1440w.jpg)
 
-`Kernel Size`: Defines the dimensions of the patch being pooled.
-`Stride`: Controls how far the window moves between pooling operations.
+`Kernel Size`: Defines the dimensions of the patch being pooled.  
+`Stride`: Controls how far the window moves between pooling operations.  
+![Stride](https://pic4.zhimg.com/v2-f72b4e145e7e99f3d3a01813ee24c767_1440w.jpg)
 
 ### 📦 Max Pooling Example:
 
@@ -123,7 +125,7 @@ print(pooled)  # Output: tensor([[[[4.0]]]])
 
 ## 📏 Step 5: Flattening
 
-**Purpose**: Convert 2D feature maps into 1D vector for fully connected layers.
+**Purpose**: Convert 2D feature maps into 1D vector for fully connected layers because `Fully connected layers` expect vectors, not matrices
 
 ### 📦 Example:
 
@@ -140,7 +142,14 @@ print(flat)  # Output: tensor([1, 2, 3, 4])
 
 ## 🧠 Step 6: Fully Connected Layer
 
-**Purpose**: Map extracted features to class scores.
+*This layer acts like the "brain" that makes final decisions based on all the features extracted by earlier layers.*
+
+**Concept**: Neurons in this layer are connected to every element in the previous layer.  
+
+**Function**: Learns global patterns by integrating all features.  
+
+`Weights & Biases`: Every connection has a weight (how strong it is) and a bias (adjusts output).  
+
 
 ### 📦 Example:
 
@@ -157,7 +166,7 @@ print(fc(x))  # Raw logits (unnormalized scores)
 
 ## 🔢 Step 7: One-Hot Encoding
 
-**Purpose**: Represent categorical labels in binary format.
+**Purpose**: Represent categorical labels in binary format.(Only one "1", rest all "0")
 
 ### 📦 Example:
 
@@ -172,7 +181,7 @@ print(encoded)
 
 **Output:**
 ```
-[[1. 0. 0.]
+[[1. 0. 0.] 
  [0. 1. 0.]
  [0. 0. 1.]]
 ```
@@ -180,8 +189,10 @@ print(encoded)
 ---
 
 ## 📊 Step 8: Softmax Function
-
-**Purpose**: Convert logits to probabilities for classification.
+*Softmax ensures each output is interpretable as a probability and lets the model "choose" the most likely class.*
+**Purpose**: Convert logits to probabilities for classification.(把只有计算机能看懂的数字变成人类能看懂的概率 `normalization`，概率最大的就是那个分类，用于classification，所有概率加和为1)
+**Formula**: $$ \text{Softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}} $$
+**Output**: A probability distribution across all possible classes (e.g., [0.1, 0.7, 0.2] for 3 classes).
 
 ### 📦 Example:
 
@@ -202,9 +213,12 @@ print(probs)  # tensor([0.659, 0.242, 0.099])
 
 ## 📉 Step 9: Loss Function
 
-**Purpose**: Measure how far predictions deviate from actual labels.
+**Purpose**: Measure how far predictions deviate from actual labels.  The loss function quantifies how wrong the model is — and drives learning by guiding gradient descent to reduce error.
 
-### Cross Entropy Loss (for classification):
+### Cross Entropy Loss (for classification):  Measures the difference between predicted probabilities and actual labels.  
+**Function**: $$ \text{Loss} = - \sum y \log(p) $$  
+- `y` : the true label (often one-hot encoded)
+- `p` : the predicted probability
 
 ```python
 import torch
@@ -223,147 +237,27 @@ print(loss.item())  # Example: ~0.74
 
 ## 🔁 Step 10: Training Cycle
 
+`Epoch`: One full pass through the training dataset.
+`Batch Size`: Number of samples processed before the model updates.
+`Learning Rate`: Controls how big a step the optimizer takes.
+`Gradient Descent`: Algorithm used to update weights and minimize loss.
+
 ```text
 1. Forward Pass ➜ Compute output
 2. Loss Calculation ➜ Measure errors
 3. Backward Pass ➜ Update weights (w, b)
 4. Repeat for many epochs
 ```
-
----
-
-## ⚙️ Hyperparameter Settings
-
-- **Kernel Init**: Gaussian or uniform initialization
-- **Padding**: Preserves edge features
-- **Stride**: Controls filter step size (affects resolution)
-
-
-
----
-
-## 💡 2. Activation Function (ReLU)
-
-Adds non-linearity so CNNs can learn complex patterns.
-
-```python
-import numpy as np
-x = np.array([-3, 0, 2])
-relu = lambda x: np.maximum(0, x)
-print(relu(x))  # Output: [0, 0, 2]
-```
-
----
-
-## 🏊 3. Pooling Layer
-
-Reduces spatial dimensions while keeping important features.
-
-```python
-import torch
-import torch.nn.functional as F
-
-x = torch.tensor([[1.0,2.0],[3.0,4.0]]).view(1,1,2,2)
-out = F.max_pool2d(x, kernel_size=2)
-print(out)  # tensor([[[[4.0]]]])
-```
-
----
-
-## 📏 4. Flatten
-
-Prepares data for fully connected layers.
-
-```python
-import torch
-x = torch.tensor([[1,2],[3,4]])
-flat = x.view(-1)
-print(flat)  # tensor([1, 2, 3, 4])
-```
-
----
-
-## 🧠 5. Fully Connected Layer
-
-Acts like a traditional neural network, mapping features to class scores.
-
-```python
-import torch.nn as nn
-fc = nn.Linear(4, 3)  # 4 inputs, 3 output classes
-x = torch.tensor([1.0, 2.0, 3.0, 4.0])
-print(fc(x))
-```
-
----
-
-## 🔢 6. One-Hot Encoding
-
-Converts class labels into binary format for classification.
-
-```python
-from sklearn.preprocessing import OneHotEncoder
-labels = [['cat'], ['dog'], ['bird']]
-encoder = OneHotEncoder(sparse=False)
-print(encoder.fit_transform(labels))
-```
-
----
-
-## 📊 7. Softmax Function
-
-Turns raw scores into probability distributions.
-
-```python
-import torch.nn.functional as F
-import torch
-logits = torch.tensor([2.0, 1.0, 0.1])
-print(F.softmax(logits, dim=0))  # tensor([0.659, 0.242, 0.099])
-```
-
----
-
-## 📉 8. Loss Function
-
-Measures prediction error. Cross Entropy is commonly used.
-
-```python
-import torch
-import torch.nn as nn
-
-criterion = nn.CrossEntropyLoss()
-outputs = torch.tensor([[1.0, 2.0, 0.1]])
-labels = torch.tensor([1])  # true label is class index 1
-
-loss = criterion(outputs, labels)
-print(loss.item())  # Lower is better
-```
-
----
-
-## ⚙️ 9. Training Process
-
-CNN training involves:
-
-- Forward pass through layers
-- Calculating loss
-- Backpropagation to update `w` and `b`
-- Repeating over multiple epochs
-
 ---
 
 ## 🛠️ 10. Hyperparameters
 
 - **Kernel Initialization**: Often Gaussian-distributed
 - **Padding**: Preserves edge information
-- **Stride**: Controls filter movement; larger stride = coarser features
+![Padding](https://pic1.zhimg.com/v2-608f1fe51c1e6d202e539fe362d9f9ba_1440w.jpg)
+- **Stride**: Controls filter movement; larger stride = coarser features --- 卷积核工作的时候，每次滑动的格子数，默认是1，但是也可以自行设置，步幅越大，扫描次数越少，得到的特征也就越“粗糙”
 
 ---
-
-## 📚 References
-
-This guide is inspired by structured explanations from Chinese deep learning tutorials and annotated diagrams. For a deeper dive, refer to the full CNN architecture breakdown in [this Zhihu image](https://pica.zhimg.com/v2-df0296c00a39a5089b24c632e0db4aa8_1440w.jpg).
-
-
 
 ---
 
@@ -376,9 +270,7 @@ Image ➜ Convolution ➜ ReLU ➜ Pooling ➜ Flatten ➜ FC Layer ➜ Softmax 
 ---
 
 ## 📚 References
-
-- Diagram credit: [Zhihu CNN Schematic](https://pica.zhimg.com/v2-df0296c00a39a5089b24c632e0db4aa8_1440w.jpg)
-- Concepts adapted from: “CNN卷积神经网络原理” tutorial series
+- Concepts & Diagrams adapted from: [一文掌握CNN卷积神经网络](https://zhuanlan.zhihu.com/p/104776627)
 
 
 
