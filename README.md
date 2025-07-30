@@ -94,6 +94,7 @@ print(relu(x))  # Output: [0 0 3]
 - It introduces non-linearity, enabling the network to learn complex, non-linear mappings between inputs and outputs.
 
 📌 Alternatives: Sigmoid and Tanh functions are also used, but ReLU tends to perform better in deep networks.
+
 ---
 
 ## 🏊 Step 4: Pooling Layer
@@ -272,7 +273,6 @@ print(loss.item())  # Example: ~0.74
 ![Padding](https://pic1.zhimg.com/v2-608f1fe51c1e6d202e539fe362d9f9ba_1440w.jpg)  
 - **Stride**: Controls filter movement; larger stride = coarser features --- 卷积核工作的时候，每次滑动的格子数，默认是1，但是也可以自行设置，步幅越大，扫描次数越少，得到的特征也就越“粗糙”
 
----
 
 ---
 
